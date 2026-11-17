@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rater Guidelines – Sổ học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: sổ tay ôn thi của rater — rõ ràng, chắc chắn, nhiều màu mã hoá ý nghĩa
+   IDEA: thanh trượt chấm điểm (rating slider) — mọi thứ được xếp theo thang màu đỏ→xanh
+   PICTURE: hai thanh trượt PQ & NM lớn ở đầu trang, bấm vào từng nấc để xem định nghĩa
+   COLOUR and TYPE: nền trắng / đêm #10151c, mực đen, màu thang điểm là màu chính; Be Vietnam Pro
+   LAYOUT: thanh tab cố định, mỗi Part là một trang gồm sơ đồ + bảng + "bẫy thi"; thẻ nhớ & quiz cuối */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#10151c);--ink:light-dark(#15181d,#e9edf2);--mute:light-dark(#5b6370,#9aa4b2);--line:light-dark(#e3e6ea,#2a323d);--card:light-dark(#f6f7f9,#171e27);--acc:light-dark(#1f5fd1,#7aa8ff);
+--l0:#c62828;--l1:#ef6c00;--l2:#f2b100;--l3:#7cb342;--l4:#2e7d32;--mc:light-dark(#fff3b0,#5a4d0a);--sc:light-dark(#d6e6ff,#1b3557);--ad:light-dark(#ffd3d3,#5a1c1c)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(24px,4vw,56px) max(5vw,16px);max-width:1240px;margin:0 auto}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.08;margin:0 0 12px;text-wrap:balance;font-weight:800}
+h2{font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:34px 0 12px;text-wrap:balance}
+h3{font-size:19px;margin:24px 0 8px}
+p{max-width:72ch}
+.mute{color:var(--mute)}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .in{display:flex;gap:6px;overflow-x:auto;padding:8px max(5vw,16px);max-width:1240px;margin:0 auto}
+nav a{flex:none;padding:10px 14px;border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;min-height:44px;display:flex;align-items:center}
+nav a[aria-current]{background:var(--ink);color:var(--bg)}
+nav a:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+section.view{display:none}section.view.on{display:block}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.card h4{margin:0 0 6px;font-size:17px}
+.card p,.card ul{margin:6px 0}.card ul{padding-left:20px}
+.trap{border-left:5px solid var(--l0);background:light-dark(#fff4f2,#2a1717);padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0}
+.trap b:first-child{color:var(--l0)}
+.key{border-left:5px solid var(--acc);background:light-dark(#eef4ff,#14223a);padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0}
+/* slider */
+.slider{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:4px;margin:12px 0}
+.slider button{border:0;border-radius:10px;padding:14px 6px;color:#fff;font:700 15px "Be Vietnam Pro",sans-serif;cursor:pointer;min-height:56px;text-shadow:0 1px 2px #0005;transition:transform .15s}
+.slider button[aria-pressed=true]{transform:translateY(-4px);box-shadow:0 6px 0 var(--ink)}
+.slider button small{display:block;font-weight:400;font-size:12px;opacity:.95}
+.out{min-height:110px}
+.hero{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+.big{font-size:13px;font-weight:700;color:var(--mute);margin-top:18px}
+/* flow */
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:12px 0}
+.step{flex:1 1 200px;border-radius:14px;padding:14px 16px;color:#fff;position:relative}
+.step b{font-size:22px;display:block}
+.arrow{align-self:center;font-size:26px;color:var(--mute)}
+/* page anatomy */
+.page{border:2px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px}
+.page div{padding:10px 12px;border-bottom:1px solid var(--line)}
+.pg2{display:grid;grid-template-columns:2fr 1fr}
+.pg2>div{border-bottom:0}
+.mc{background:var(--mc)}.sc{background:var(--sc)}.ad{background:var(--ad)}
+/* eeat */
+.eeat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto;gap:10px;max-width:640px}
+.eeat .t{grid-column:1/4;background:var(--acc);color:#fff;border-radius:14px;padding:16px;text-align:center}
+.eeat .e{background:var(--card);border:2px solid var(--acc);border-radius:14px;padding:12px;text-align:center;font-size:14px}
+.eeat b{font-size:20px;display:block}
+/* tables */
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--mute)}
+td.c0{border-top:4px solid var(--l0)}td.c1{border-top:4px solid var(--l1)}td.c2{border-top:4px solid var(--l2)}td.c3{border-top:4px solid var(--l3)}td.c4{border-top:4px solid var(--l4)}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
+/* ladder */
+.ladder{display:grid;gap:6px}
+.ladder div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:center;background:var(--card);border-radius:10px;padding:8px 12px}
+.ladder span{font-weight:700;border-radius:8px;padding:6px 8px;color:#fff;text-align:center;font-size:14px}
+/* flashcards */
+.fc{perspective:1000px;max-width:620px;margin:0 auto}
+.fc .inner{position:relative;min-height:240px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+.fc.flip .inner{transform:rotateY(180deg)}
+.fc .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:24px;display:flex;flex-direction:column;justify-content:center;border:2px solid var(--line);background:var(--card)}
+.fc .back{transform:rotateY(180deg);background:var(--ink);color:var(--bg)}
+.fc .face b{font-size:clamp(19px,3vw,24px);line-height:1.3}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px 0}
+.btn{min-height:44px;padding:10px 18px;border-radius:12px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);font:600 15px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.btn.pri{background:var(--ink);color:var(--bg)}
+select.btn{padding-right:30px}
+/* quiz */
+.q{max-width:720px;margin:0 auto}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 16px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:500 16px "Be Vietnam Pro",sans-serif;cursor:pointer;min-height:48px}
+.opt.ok{border-color:var(--l4);background:light-dark(#e6f4e7,#13301a)}
+.opt.no{border-color:var(--l0);background:light-dark(#fde8e8,#3a1515)}
+.bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--l0),var(--l2),var(--l4));transition:width .3s}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.check input{width:22px;height:22px;flex:none;margin-top:3px}
+@media(max-width:600px){.ladder div{grid-template-columns:1fr}.pg2{grid-template-columns:1fr}.eeat{grid-template-columns:1fr}.eeat .t{grid-column:1}.slider button{font-size:12px;padding:10px 2px}.slider button small{display:none}table{font-size:13px}
+.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;font-weight:700;color:var(--mute)}.stack td:empty{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<nav><div class="in" id="nav">
+<a href="#tong-quan">Tổng quan</a><a href="#part1">Part 1 · PQ</a><a href="#part2">Part 2 · User Needs</a><a href="#part3">Part 3 · Needs Met</a><a href="#con-lai">Phần còn lại</a><a href="#the-nho">Thẻ nhớ</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<!-- ============ TỔNG QUAN ============ -->
+<section class="view" id="v-tong-quan"><div class="band">
+<h1>Hai thanh trượt là cả bài thi</h1>
+<p>Toàn bộ <b>General Guidelines v10.1.1</b> (09/2025, 181 trang) xoay quanh hai câu hỏi: trang này <b>tốt đến đâu</b> (Page Quality) và kết quả này <b>giúp người tìm kiếm đến đâu</b> (Needs Met). Bấm vào từng nấc để xem nhanh.</p>
+<div class="big">PAGE QUALITY (PQ) — không phụ thuộc query</div>
+<div class="slider" id="pqS" style="--n:5"></div>
+<div class="card out" id="pqO"></div>
+<div class="big">NEEDS MET (NM) — phụ thuộc query + kết quả</div>
+<div class="slider" id="nmS" style="--n:5"></div>
+<div class="card out" id="nmO"></div>
+<div class="key"><b>Dấu “+”</b> = “+½”: Lowest+ nằm giữa Lowest và Low, Low+ giữa Low và Medium… (áp dụng cho cả hai thang).</div>
+
+<h2>Bản đồ tài liệu</h2>
+<div class="grid">
+<div class="card"><h4>Introduction (0.0–0.6)</h4><p>Vì sao có rater, đại diện cho người dùng locale, không dùng ad-block, an toàn internet.</p></div>
+<div class="card" style="border-top:5px solid var(--l0)"><h4>Part 1 · Page Quality (1–11)</h4><p>Mục đích trang, YMYL, MC/SC/Ads, danh tiếng, E‑E‑A‑T, 5 mức chất lượng. <b>Phần nặng nhất.</b></p></div>
+<div class="card" style="border-top:5px solid var(--l2)"><h4>Part 2 · User Needs (12)</h4><p>Query, locale, các cách hiểu (interpretation), user intent: Know, Do, Website, Visit-in-person.</p></div>
+<div class="card" style="border-top:5px solid var(--l4)"><h4>Part 3 · Needs Met (13–24)</h4><p>Thang NM, quan hệ PQ–NM, flag, freshness, query chính tả sai, sản phẩm, locale không phải tiếng Anh…</p></div>
+<div class="card"><h4>Appendix (25–31)</h4><p>Evaluation Platform: nhận task, release task, bản đồ vị trí, đánh dấu Duplicate.</p></div>
+</div>
+
+<h2>Lộ trình học gợi ý</h2>
+<p class="mute">Đánh dấu khi xong — trình duyệt của bạn sẽ nhớ.</p>
+<div id="plan"></div>
+<h2>Nguyên tắc vàng</h2>
+<div class="grid">
+<div class="card"><h4>Không theo ý kiến cá nhân</h4><p>Rating dựa trên guideline và chuẩn văn hoá của locale, không dựa trên quan điểm, tôn giáo, chính trị của bạn.</p></div>
+<div class="card"><h4>Không bật ad-blocker</h4><p>Phải tắt cả ad-block có sẵn của Chrome — để thấy trang như người dùng thật thấy.</p></div>
+<div class="card"><h4>Rating không đẩy trang lên/xuống</h4><p>Rating dùng để <b>đo lường</b> và <b>cải thiện</b> search engine, không trực tiếp đổi thứ hạng một trang.</p></div>
+<div class="card"><h4>Cảnh báo malware → dừng</h4><p>Không tải file thực thi. Gặp cảnh báo “may harm your computer” thì không vào trang.</p></div>
+</div>
+</div></section>
+
+<!-- ============ PART 1 ============ -->
+<section class="view" id="v-part1"><div class="band">
+<h1>Part 1 · Page Quality: trang đạt mục đích tốt đến đâu?</h1>
+<p>Một task PQ gồm: <b>URL</b> + <b>PQ grid</b> (sổ ghi chú) + <b>slider</b> tổng + <b>ô comment</b>. Mục tiêu: đánh giá <b>trang đạt mục đích (purpose) tốt đến đâu</b>.</p>
+
+<h2>3 bước chấm PQ (3.0)</h2>
+<div class="flow">
+<div class="step" style="background:var(--l0)"><b>1. Purpose</b>Mục đích thật là gì? Mục đích gây hại hoặc <b>lừa dối</b> về mục đích → <b>Lowest</b>.</div><div class="arrow">→</div>
+<div class="step" style="background:var(--l1)"><b>2. Harm</b>Có gây hại, <b>untrustworthy</b> hoặc <b>spammy</b> không? Có → <b>Lowest</b>.</div><div class="arrow">→</div>
+<div class="step" style="background:var(--l4)"><b>3. Achieve</b>Nếu không, chấm theo mức độ trang <b>đạt được mục đích</b>.</div>
+</div>
+<div class="trap"><b>Bẫy:</b> Bước 1–2 là “màng lọc” chạy <b>trước</b> mọi thứ khác. Đánh giá harm <b>ghi đè</b> cả kinh nghiệm/chuyên môn của người viết. Trang của chính phủ, trường đại học, từ thiện… vẫn phải kiểm tra harm.</div>
+<div class="key">Không có loại trang nào “cao cấp” hơn loại khác: trang bách khoa không mặc định tốt hơn trang hài. Có trang Highest và Lowest ở <b>mọi</b> loại.</div>
+
+<h2>Giải phẫu một trang (2.4)</h2>
+<div class="grid">
+<div class="page">
+<div class="mc"><b>MC – Main Content</b> · gồm cả <b>tiêu đề</b> trang, tab Reviews/Shipping, tính năng (máy tính, game), bình luận của user nếu là mục đích</div>
+<div class="pg2"><div class="mc">MC: bài viết / video / công cụ</div><div class="sc"><b>SC</b> · link điều hướng, nội dung liên quan</div></div>
+<div class="ad"><b>Ads/Monetization</b> · quảng cáo, sponsored, <b>mọi link kiếm tiền (affiliate)</b></div>
+</div>
+<div>
+<div class="card"><h4><span class="pill" style="background:#b8960a">MC</span> trực tiếp giúp trang đạt mục đích</h4><p>Chất lượng MC đóng vai trò <b>rất lớn</b> trong PQ.</p></div>
+<div class="card" style="margin-top:10px"><h4><span class="pill" style="background:#3d6db5">SC</span> hỗ trợ trải nghiệm nhưng không trực tiếp</h4><p>Mẹo: phần nào không phải MC hay Ads thì là SC.</p></div>
+<div class="card" style="margin-top:10px"><h4><span class="pill" style="background:var(--l0)">Ads</span> để kiếm tiền</h4><p>Có hay không có Ads <b>tự nó không</b> là lý do để chấm High hay Low. Website chịu trách nhiệm về chất lượng Ads hiển thị.</p></div>
+</div></div>
+<p class="mute">Cách làm: tìm MC trước → tìm Ads → phần còn lại là SC. Review/comment có thể là MC hoặc SC tùy mục đích trang.</p>
+
+<h2>YMYL – Your Money or Your Life (2.3)</h2>
+<p>Chủ đề có thể ảnh hưởng lớn đến <b>sức khoẻ, tài chính, an toàn</b> hoặc <b>phúc lợi xã hội</b>. Hại có thể đến với: người xem, người bị ảnh hưởng bởi người xem, hoặc cả xã hội.</p>
+<div class="grid">
+<div class="card" style="border-top:5px solid var(--l0)"><h4>Health or Safety</h4><p>Sức khoẻ thể chất, tinh thần, cảm xúc; an toàn kể cả trên mạng.</p></div>
+<div class="card" style="border-top:5px solid var(--l1)"><h4>Financial Security</h4><p>Khả năng tự nuôi sống bản thân và gia đình.</p></div>
+<div class="card" style="border-top:5px solid var(--l2)"><h4>Government, Civics & Society</h4><p>Bầu cử, niềm tin vào thể chế công, vấn đề công cộng.</p></div>
+<div class="card" style="border-top:5px solid var(--mute)"><h4>Other</h4><p>Chủ đề khác có thể gây hại hoặc ảnh hưởng xấu đến xã hội.</p></div>
+</div>
+<h3>YMYL là một phổ (spectrum)</h3>
+<div class="scroll"><table class="stack"><thead><tr><th>Loại</th><th>Clear YMYL</th><th>May be YMYL</th><th>Not / Unlikely</th></tr></thead><tbody>
+<tr><td>Thông tin</td><td class="c0">Tuyến sơ tán sóng thần</td><td class="c2">Dự báo thời tiết</td><td class="c4">Người thắng giải âm nhạc</td></tr>
+<tr><td>Lời khuyên</td><td class="c0">Khi nào đi cấp cứu</td><td class="c2">Bao lâu thay bàn chải</td><td class="c4">Bao lâu giặt quần jean</td></tr>
+<tr><td>Ý kiến cá nhân</td><td class="c0">Vì sao một chủng tộc “kém hơn”</td><td class="c2">Vì sao một bài tập kém hơn</td><td class="c4">Vì sao một ban nhạc rock dở</td></tr>
+<tr><td>Tin tức</td><td class="c0">Bạo lực đang diễn ra</td><td class="c2">Tai nạn xe hơi</td><td class="c4">Trận bóng rổ trường cấp 3</td></tr>
+<tr><td>Mạng xã hội</td><td class="c0">Tide pod challenge</td><td class="c2">Thử thách ăn sốt cay</td><td class="c4">Music video</td></tr>
+<tr><td>Mua sắm</td><td class="c0">Mua thuốc kê đơn</td><td class="c2">Review một loại xe</td><td class="c4">Mua bút chì</td></tr>
+</tbody></table></div>
+<div class="key"><b>2 câu hỏi kiểm tra:</b> (1) Người cẩn thận có tìm chuyên gia/nguồn rất tin cậy để tránh hại không? Sai nhỏ có gây hại không? → có thì <b>YMYL</b>. (2) Chủ đề mà đa số chỉ cần hỏi bạn bè cho vui? → có thì <b>không YMYL</b>.</div>
+
+<h2>Website & người tạo nội dung (2.5)</h2>
+<div class="grid">
+<div class="card"><h4>Tìm homepage</h4><p>Bấm logo/tên site. Không có link → xoá mọi thứ sau “.com/.org/.vn…”. Nhiều ứng viên homepage → chọn cái <b>cho nhiều thông tin nhất</b> về trang.</p></div>
+<div class="card"><h4>Ai chịu trách nhiệm & ai tạo MC?</h4><p>Forum/MXH: <b>alias/username là chấp nhận được</b>. Trang tin: tác giả; trang shop: chủ website; MXH: chủ tài khoản; forum: những người đăng.</p></div>
+<div class="card"><h4>Liên hệ / CSKH</h4><p>Cực kỳ quan trọng với site xử lý <b>tiền</b> (shop, ngân hàng): chính sách thanh toán, đổi trả. Site hài hước cần ít hơn. Ẩn danh có thể chính đáng.</p></div>
+</div>
+
+<h2>Chất lượng MC (3.2): 4 thước đo</h2>
+<div class="grid">
+<div class="card"><h4>Effort</h4><p>Con người đã chủ động làm việc để tạo nội dung thỏa mãn. Dịch máy hàng loạt không kiểm soát = không có effort. Forum: độ sâu thảo luận cũng là effort.</p></div>
+<div class="card"><h4>Originality</h4><p>Nội dung độc đáo, không có ở site khác; nếu giống, trang có phải nguồn gốc không?</p></div>
+<div class="card"><h4>Talent / Skill</h4><p>Đủ tài năng, kỹ năng để mang lại trải nghiệm thỏa mãn.</p></div>
+<div class="card"><h4>Accuracy</h4><p>Với trang thông tin: đúng sự thật. Với YMYL: <b>khớp đồng thuận chuyên gia</b>.</p></div>
+</div>
+<p class="mute">Hãy thật sự dùng trang: đọc bài, xem video, bỏ ít nhất 1 sản phẩm vào giỏ, chơi thử game.</p>
+
+<h2>Danh tiếng – Reputation (3.3)</h2>
+<div class="grid">
+<div class="card"><h4>Bắt buộc với mọi task PQ</h4><p>Nghiên cứu theo <b>chủ đề</b> của trang (site hài có thể uy tín về hài, nhưng không về tài chính). Nếu site không tự tạo MC → nghiên cứu cả <b>content creator</b>.</p></div>
+<div class="card"><h4>Cú pháp tìm kiếm</h4><p><code>[ibm -site:ibm.com]</code><br><code>["ibm.com" -site:ibm.com]</code><br><code>[ibm reviews -site:ibm.com]</code><br><code>[ibm site:en.wikipedia.org]</code></p></div>
+<div class="card"><h4>Tin nguồn độc lập</h4><p>Khi site tự nói khác nguồn độc lập uy tín → <b>tin nguồn độc lập</b>. YMYL: xét theo ý kiến <b>chuyên gia</b>. Số liệu traffic (Similarweb) <b>không</b> phải danh tiếng.</p></div>
+<div class="card"><h4>Customer reviews</h4><p>Hoài nghi cả review tốt lẫn xấu, đọc nội dung chứ không chỉ số sao. Vài review xấu là bình thường; bằng chứng <b>lừa đảo tài chính</b> = cực kỳ tiêu cực.</p></div>
+<div class="card"><h4>Không tìm thấy danh tiếng?</h4><p>Site nhỏ, người thường dùng alias: <b>không tốt cũng không xấu</b>. Hãy chú ý hơn đến các yếu tố khác, nhất là với YMYL.</p></div>
+</div>
+
+<h2>E‑E‑A‑T (3.4): Trust ở trung tâm</h2>
+<div class="eeat">
+<div class="t"><b>TRUST</b>Chính xác, trung thực, an toàn, đáng tin cậy. Trang không đáng tin = E‑E‑A‑T thấp, <b>dù</b> có vẻ chuyên gia đến đâu.</div>
+<div class="e"><b>Experience</b>Trải nghiệm trực tiếp (review của người đã dùng sản phẩm)</div>
+<div class="e"><b>Expertise</b>Kiến thức, kỹ năng (thợ điện vs người mê nhà cổ)</div>
+<div class="e"><b>Authoritativeness</b>Nguồn “go-to” (trang chính phủ về hộ chiếu)</div>
+</div>
+<p>Đánh giá E‑E‑A‑T dựa trên: (1) website/creator tự nói gì về mình, (2) <b>người khác</b> nói gì, (3) những gì thấy trên trang (MC, comment).</p>
+<div class="trap"><b>Bẫy:</b> <b>Xung đột lợi ích</b> làm giảm Trust: “review” của nhà sản xuất hay influencer được trả tiền kém tin cậy hơn review của người mua thật. Một kẻ lừa đảo “chuyên gia” vẫn là untrustworthy.</div>
+<h3>YMYL: Experience hay Expertise? (3.4.1)</h3>
+<div class="scroll"><table class="stack"><thead><tr><th>Chủ đề</th><th>Chia sẻ trải nghiệm OK</th><th>Nên để chuyên gia</th></tr></thead><tbody>
+<tr><td>Khó ngủ khi mang thai</td><td>Mẹo dùng gối an toàn, không y tế</td><td>Thuốc ngủ an toàn khi mang thai</td></tr>
+<tr><td>Điều trị ung thư gan</td><td>Thảo luận forum về cách đối mặt</td><td>Các phương án điều trị & tuổi thọ</td></tr>
+<tr><td>Khai thuế</td><td>Video hài về nỗi khổ khai thuế</td><td>Hướng dẫn điền tờ khai</td></tr>
+<tr><td>Tiết kiệm hưu trí</td><td>Review dịch vụ đã dùng</td><td>Nên đầu tư gì, cần bao nhiêu</td></tr>
+<tr><td>Bầu cử</td><td>Bài đăng vì sao nên đi bầu</td><td>Ai đủ điều kiện, cách đăng ký</td></tr>
+</tbody></table></div>
+
+<h2>Bảng so sánh 5 mức PQ</h2>
+<p class="mute">Lowest/Low: <b>chỉ cần một</b> tiêu chí là đủ. High/Highest: phải có <b>ít nhất một</b> trong (MC, reputation, E‑E‑A‑T).</p>
+<div class="scroll"><table class="stack"><thead><tr><th>Tiêu chí</th><th>Lowest</th><th>Low</th><th>Medium</th><th>High</th><th>Highest</th></tr></thead><tbody>
+<tr><td>Mục đích / harm</td><td class="c0">Có hại, lừa dối, chỉ để kiếm tiền cho chủ site</td><td class="c1">Có ích; không hại hoặc hại nhẹ</td><td class="c2">Có ích, không hại</td><td class="c3">Có ích, không hại</td><td class="c4">Có ích, không hại</td></tr>
+<tr><td>MC</td><td class="c0">Hack/spam, vô nghĩa, gần như không effort/originality/added value</td><td class="c1">Thiếu effort, originality, talent/skill để thỏa mãn</td><td class="c2">Đủ (adequate) để đạt mục đích</td><td class="c3">Cao (high) → đạt tốt</td><td class="c4">Rất cao → đạt rất tốt</td></tr>
+<tr><td>Tiêu đề</td><td class="c0">Cực kỳ sai lệch, gây sốc, phóng đại</td><td class="c1">Hơi sai lệch / phóng đại</td><td class="c2">Tóm tắt đúng trang</td><td class="c3">Tóm tắt đúng trang</td><td class="c4">Tóm tắt đúng trang</td></tr>
+<tr><td>Ads / SC</td><td class="c0">Cố tình che, chặn MC</td><td class="c1">Gây xao nhãng đáng kể</td><td class="c2">Không cản trở MC</td><td class="c3">Không cản trở MC</td><td class="c4">Không cản trở MC</td></tr>
+<tr><td>Thông tin website</td><td class="c0">Hoàn toàn không có (YMYL/cần tin cậy)</td><td class="c1">Không đủ cho mục đích</td><td class="c2">Đủ</td><td class="c3">Đủ</td><td class="c4">Đủ</td></tr>
+<tr><td>Reputation</td><td class="c0">Rất xấu, độc hại</td><td class="c1">Hơi tiêu cực</td><td class="c2">Không tốt, không xấu</td><td class="c3">Tích cực</td><td class="c4">Rất tích cực</td></tr>
+<tr><td>E‑E‑A‑T</td><td class="c0">Rất không đáng tin; thiếu E‑E‑A‑T khiến trang thất bại</td><td class="c1">Không đủ cho mục đích</td><td class="c2">Đủ</td><td class="c3">Cao</td><td class="c4">Rất cao (nguồn go-to duy nhất)</td></tr>
+</tbody></table></div>
+
+<h2>Lowest (4.0): 3 nhóm lớn</h2>
+<div class="grid">
+<div class="card" style="border-top:6px solid var(--l0)"><h4>HARMFUL</h4><ul>
+<li><b>4.2 Hại bản thân/người khác:</b> hướng dẫn tự tử, đe doạ, <b>doxxing</b>, pro-anorexia, lời khuyên y tế trái đồng thuận gây hại nghiêm trọng.</li>
+<li><b>4.3 Hại Specified Group</b> (tuổi, đẳng cấp, khuyết tật, dân tộc, giới, nhập cư, quốc tịch, chủng tộc, tôn giáo, xu hướng tính dục, cựu chiến binh, nạn nhân thảm hoạ…). Giọng phải <b>nghiêm túc hoặc ác ý</b>.</li>
+<li><b>4.4 Harmfully Misleading:</b> sai rõ ràng (ngày bầu cử giả), trái đồng thuận chuyên gia (chanh chữa ung thư), thuyết âm mưu vô căn cứ.</li></ul></div>
+<div class="card" style="border-top:6px solid var(--l1)"><h4>UNTRUSTWORTHY (4.5)</h4><ul>
+<li>Nhiều sai sót sự thật nghiêm trọng</li>
+<li>Thiếu thông tin về site/creator (site xử lý dữ liệu nhạy cảm phải có liên hệ đầy đủ)</li>
+<li>E‑E‑A‑T / reputation Lowest</li>
+<li><b>Lừa dối:</b> mục đích, thông tin về site (giả mạo thương hiệu, tác giả AI giả, bằng cấp giả), thiết kế (Ads giả kết quả search, nút giả)</li>
+<li>Cố tình che MC (popup không đóng được, chữ trắng trên nền trắng)</li>
+<li>Nghi lừa đảo, phishing, malware — <b>không cần chứng minh</b></li></ul></div>
+<div class="card" style="border-top:6px solid var(--l2)"><h4>SPAMMY (4.6)</h4><ul>
+<li>Không xác định được mục đích, không/ít MC, MC vô nghĩa</li>
+<li>Bị hack, deface, comment spam</li>
+<li><b>Expired domain abuse:</b> mua domain cũ uy tín (trường học) để đăng casino</li>
+<li><b>Site reputation abuse:</b> nội dung bên thứ 3 “ký gửi” để tận dụng thứ hạng (site y tế đăng “best casinos”)</li>
+<li><b>Scaled content abuse:</b> sinh hàng loạt trang ít giá trị, dù bằng AI hay cách khác</li>
+<li>Gần như toàn bộ MC copy/paraphrase/embed/repost không giá trị thêm</li></ul></div>
+</div>
+<div class="trap"><b>Không phải Lowest:</b> nội dung gây tranh cãi, một chiều, khó chịu; tin tức/giáo dục về sự việc có hại; hài không ác ý; phê bình ý tưởng/tôn giáo (không nhắm vào người); fiction, satire, chiêm tinh; review ý kiến cá nhân; lỗi nhỏ về chủ đề vặt; login/paywall; nội dung không tải được hay bị chặn theo vùng; <b>chỉ có Ads</b>.</div>
+<div class="key"><b>Không phải site reputation abuse:</b> báo đăng tin syndicate, wire/press release, UGC (forum, comment), bài editorial/opinion, advertorial nhắm tới độc giả, affiliate link được xử lý đúng, coupon lấy trực tiếp từ merchant.</div>
+
+<h2>Copy / paraphrase: Lowest hay Low?</h2>
+<div class="ladder">
+<div><span style="background:var(--l0)">Lowest</span><p style="margin:0"><b>Tất cả hoặc gần như tất cả</b> MC copy/paraphrase/embed/repost với <b>little to no</b> effort, originality, added value — kể cả khi có ghi nguồn.</p></div>
+<div><span style="background:var(--l1)">Low</span><p style="margin:0"><b>Phần lớn</b> MC copy… nhưng có <b>chút</b> effort: biên tập, tuyển chọn, định dạng lại, thêm nội dung gốc. Ví dụ: repost ít bình luận, list “best” tổng hợp review.</p></div>
+<div><span style="background:var(--l3)">OK</span><p style="margin:0">Nội dung <b>licensed/syndicated</b> (AP, Reuters) không bị coi là copy. Dùng <b>AI không tự quyết định</b> chất lượng.</p></div>
+</div>
+<p><b>Cách kiểm tra copy (4.6.7):</b> chép một câu → tìm trên Google có/không ngoặc kép → so sánh, tìm nguồn gốc (Wayback Machine). Dấu hiệu paraphrase: chỉ kiến thức phổ thông, trùng nhiều với Wikipedia, tóm tắt một trang khác, có câu như “As an AI language model”.</p>
+
+<h2>Low (5.0): một dấu hiệu là đủ</h2>
+<div class="grid">
+<div class="card"><h4>5.1 Thiếu E‑E‑A‑T</h4><p>Review nhà hàng chưa từng ăn; hướng dẫn nhảy dù không chuyên môn; tải form thuế trên site nấu ăn. <b>Không gì bù được</b> việc thiếu E‑E‑A‑T, kể cả danh tiếng tốt.</p></div>
+<div class="card"><h4>5.2 MC chất lượng thấp</h4><p>Sai sót nhẹ; tiêu đề phóng đại nhẹ (“Is the World about to End?” cho xác cá); <b>filler</b> đặt trước nội dung hữu ích (5.2.2).</p></div>
+<div class="card"><h4>5.3 Ads/SC gây xao nhãng</h4><p>Quảng cáo bám theo khi cuộn khó đóng, interstitial bắt tải app, ảnh gợi dục/ghê rợn. Một popup có nút đóng rõ thì <b>không</b> đáng kể.</p></div>
+<div class="card"><h4>5.4–5.6 Website/creator</h4><p>Danh tiếng hơi xấu; thông tin không đủ (site thanh toán thiếu CSKH → Low); tự giới thiệu phóng đại hoặc hơi gây hiểu lầm.</p></div>
+</div>
+<div class="trap"><b>Bẫy:</b> Tài năng của người thường đăng MXH (lần đầu thử một sở thích) được xét <b>khoan dung</b>; chỉ Low nếu thiếu kỹ năng khiến trang không đạt mục đích.</div>
+
+<h2>Medium, High, Highest</h2>
+<div class="grid">
+<div class="card" style="border-top:6px solid var(--l2)"><h4>Medium (6.0)</h4><p>Hai kiểu: <b>“Nothing wrong, but nothing special”</b> hoặc <b>“Mixed”</b> (có dấu hiệu High nhưng kèm một/vài dấu hiệu Low nhẹ). Rất phổ biến — không có gì sai.</p></div>
+<div class="card" style="border-top:6px solid var(--l3)"><h4>High (7.0)</h4><p>Ít nhất một: MC high effort/originality/talent; reputation tích cực về chủ đề; E‑E‑A‑T cao. Trang “trung bình” về một chủ đề thường chỉ Medium — <b>hãy đặt chuẩn cao</b>. Không có reputation vẫn có thể High.</p></div>
+<div class="card" style="border-top:6px solid var(--l4)"><h4>Highest (8.0)</h4><p>MC rất cao (tin: điều tra gốc; nghệ thuật: tài năng cao; thông tin: chính xác, toàn diện, rõ ràng); reputation rất tích cực (YMYL: được hiệp hội nghề nghiệp, chuyên gia khuyên dùng); E‑E‑A‑T rất cao.</p></div>
+</div>
+
+<h2>Loại trang đặc biệt (9.0)</h2>
+<div class="grid">
+<div class="card"><h4>Bách khoa toàn thư</h4><p>High/Highest chỉ cho bách khoa uy tín + bài có trích dẫn. Wikipedia non‑YMYL đủ thông tin + nguồn → thường <b>High</b>; ít nội dung → <b>Medium</b>; sai sự thật → Low/Lowest.</p></div>
+<div class="card"><h4>Trang lỗi / không MC</h4><p>Custom 404 thường <b>Medium</b>; hiếm khi High/Highest nếu rất sáng tạo. Hỏng <b>tạm thời</b> → <b>Low</b>; hỏng <b>hệ thống</b> (nhiều trang giống vậy) → <b>Lowest</b>.</p></div>
+<div class="card"><h4>Forum & Q&A</h4><p>MC = câu hỏi + trả lời + thảo luận. Chấm từ góc nhìn <b>người ghé xem</b>. Bài mới chỉ có câu hỏi → <b>Medium</b>. Lâu không ai trả lời → có thể Low. Thảo luận lạc đề nhưng vẫn có ý hay → Medium.</p></div>
+</div>
+<div class="key"><b>10.0 Task PQ kết thúc sớm</b> nếu trang là Porn, Foreign Language, Did Not Load hoặc MC bị khoá (cần subscription) — không điền grid, không chấm tổng. Trang không phải webpage (PDF, ảnh) → dùng phán đoán.</div>
+</div></section>
+
+<!-- ============ PART 2 ============ -->
+<section class="view" id="v-part2"><div class="band">
+<h1>Part 2 · Hiểu người tìm kiếm cần gì</h1>
+<h2>Định nghĩa cốt lõi (12.1)</h2>
+<div class="grid">
+<div class="card"><h4>Query</h4><p>Nội dung user nhập/nói/chụp. Viết trong ngoặc vuông: [coffee shops near me].</p></div>
+<div class="card"><h4>Query interpretation</h4><p>Các nghĩa có thể có: [apple] = hãng máy tính, trái táo…</p></div>
+<div class="card"><h4>User intent</h4><p>User muốn đạt được gì. Một người có thể có nhiều intent cho cùng một query.</p></div>
+<div class="card"><h4>Locale</h4><p>Ngôn ngữ + vùng của task, ví dụ English (US), Vietnamese (VN).</p></div>
+<div class="card"><h4>User location</h4><p>Vị trí cụ thể hơn (thành phố), hiện trên bản đồ. Quan trọng với [coffee shops near me], không quan trọng với [how does gravity work].</p></div>
+<div class="card"><h4>SERP · Result · LP</h4><p>Result = <b>result block</b> + <b>landing page (LP)</b>.</p></div>
+</div>
+<div class="trap"><b>Bẫy:</b> Khi tra query trên Google, <b>đừng</b> dựa vào kết quả top. Không cho rating cao chỉ vì trang đứng đầu Google. Vẫn không hiểu query → <b>release</b> task.</div>
+
+<h2>Vị trí: 3 lớp cần phân biệt (12.3–12.4)</h2>
+<div class="flow">
+<div class="step" style="background:#5b6370"><b>Locale</b>Ngôn ngữ + quốc gia của task</div>
+<div class="step" style="background:#3d6db5"><b>User location</b>Nơi user đang đứng</div>
+<div class="step" style="background:var(--acc)"><b>Explicit location</b>Địa điểm ghi trong query: [New York hotels] từ Dallas → muốn khách sạn ở New York. <b>Luôn ưu tiên.</b></div>
+</div>
+
+<h2>Thang các cách hiểu query (12.5)</h2>
+<div class="ladder">
+<div><span style="background:var(--l4)">Dominant</span><p style="margin:0">Đa số user muốn nói. Không phải query nào cũng có. [apple] → hãng máy tính.</p></div>
+<div><span style="background:var(--l3)">Common</span><p style="margin:0">Nhiều hoặc một số user. Có thể có nhiều common. [apple] → trái táo.</p></div>
+<div><span style="background:var(--l2)">Reasonable minor</span><p style="margin:0">Ít user hơn nhưng vẫn đáng có trong kết quả.</p></div>
+<div><span style="background:var(--l1)">Unlikely minor</span><p style="margin:0">Có thể về lý thuyết nhưng rất ít user. [apple] → thành phố Apple.</p></div>
+<div><span style="background:var(--l0)">No chance</span><p style="margin:0">Hầu như không ai nghĩ đến. [hot dog] → chó bị nóng. Kết quả cho nghĩa này dù khớp từ khoá vẫn lạc đề.</p></div>
+</div>
+<div class="key">Chú ý <b>từ quan trọng</b> trong query: [lewis county <b>non emergency</b> number] — trả số khẩn cấp là sai. [can bears climb mountains] — khớp từ khoá ≠ hữu ích.</div>
+<div class="key"><b>12.6 Nghĩa thay đổi theo thời gian:</b> mặc định user muốn thông tin <b>hiện tại</b>, model mới nhất, lần tổ chức gần nhất. [iphone] năm 2007 = iPhone 1; ngày nay = model mới nhất.</div>
+
+<h2>4 loại user intent (12.7)</h2>
+<div class="grid">
+<div class="card" style="border-top:6px solid #3d6db5"><h4>Know</h4><p>Tìm thông tin, khám phá chủ đề: [barack obama], [graves disease].</p>
+<p><b>Know Simple:</b> một đáp án cụ thể, đúng & đầy đủ, vừa 1–2 câu hoặc danh sách ngắn, đa số đồng ý: [barack obama height], [weather].</p></div>
+<div class="card" style="border-top:6px solid var(--l1)"><h4>Do</h4><p>Hoàn thành mục tiêu/hoạt động: tải, mua, xem, tương tác. [pay parking ticket], [what is my bmi?], [music videos].</p></div>
+<div class="card" style="border-top:6px solid var(--l4)"><h4>Website</h4><p>Tìm một site/trang cụ thể (<b>target</b>). Gồm URL query chuẩn [ibm.com] và URL lỗi [www.netflix.coom]. [reddit login], [yahoo mail].</p></div>
+<div class="card" style="border-top:6px solid var(--l0)"><h4>Visit-in-person</h4><p>Muốn đến nơi: [gas stations], [dentists]. Có query hai mặt: [walmart], [hotels], [bank of america]. [verbena] ở Austin có thể là nhà hàng.</p></div>
+</div>
+<h3>Không phải Know Simple khi…</h3>
+<p>Query rộng/phức tạp; mơ hồ; gây tranh cãi; không có đáp án đúng duy nhất (ví dụ [should i invest in starbucks stock]); user muốn duyệt, tìm cảm hứng ([hair styles for men with round faces]) hoặc ý kiến người thật.</p>
+<div class="trap"><b>Bẫy:</b> Ranh giới Know/Do có khi mờ — không cần tách bạch tuyệt đối. Với query nhiều intent, <b>nghiêng về coi các intent là hợp lý</b> và tra cứu thêm.</div>
+
+<h2>Result block (12.8)</h2>
+<div class="grid">
+<div class="card"><h4>Web Search Result Block</h4><p>Tiêu đề + URL + snippet. Thường hữu ích nhất.</p></div>
+<div class="card"><h4>Special Content Result Block (SCRB)</h4><p>Hiện nội dung ngay trên SERP: thời tiết, máy tính, video, tỷ số.</p><ul><li>Giả định <b>tính năng tương tác hoạt động</b>.</li><li><b>Không phạt</b> SCRB vì dữ liệu cũ do độ trễ giữa lúc tạo task và lúc chấm.</li></ul></div>
+</div>
+</div></section>
+
+<!-- ============ PART 3 ============ -->
+<section class="view" id="v-part3"><div class="band">
+<h1>Part 3 · Needs Met: kết quả giúp user đến đâu?</h1>
+<div class="slider" id="nmS2" style="--n:5"></div>
+<div class="card out" id="nmO2"></div>
+
+<h2>Chấm phần nào của kết quả? (13.1)</h2>
+<div class="scroll"><table class="stack"><thead><tr><th>Loại</th><th>Chấm dựa trên</th></tr></thead><tbody>
+<tr><td><b>SCRB</b></td><td>Nội dung trong block luôn quan trọng. Đa số user <b>không bấm</b> → chấm theo block. Nhiều user <b>sẽ bấm</b> → xét cả LP, và <b>cả hai</b> phải tốt để được rating cao.</td></tr>
+<tr><td><b>Web Search Result</b></td><td>Cần bấm → chấm theo <b>landing page</b>.</td></tr>
+<tr><td><b>Landing Page NM</b> (khi task yêu cầu)</td><td><b>Chỉ</b> LP; bỏ qua nội dung trong block.</td></tr>
+<tr><td><b>Block Content NM</b> (khi task yêu cầu)</td><td><b>Chỉ</b> nội dung block (tiêu đề, snippet, hình); <b>không bấm</b> vào LP.</td></tr>
+</tbody></table></div>
+
+<h2>Fully Meets: 3 điều kiện (13.2)</h2>
+<div class="flow">
+<div class="step" style="background:var(--l4)"><b>1</b>Query interpretation và intent <b>cụ thể, rõ ràng, không mơ hồ</b></div>
+<div class="step" style="background:var(--l4)"><b>2</b>Có <b>một</b> site/trang/fact cụ thể mà hầu hết user đều tìm</div>
+<div class="step" style="background:var(--l4)"><b>3</b>Hầu hết user sẽ <b>hoàn toàn thỏa mãn</b></div>
+</div>
+<p>Ví dụ FullyM: [amazon], [titanic imdb], [www.netflix.coom], [cnn health], [chef chu phone number] (phải <b>kiểm tra số đúng</b>), [what country is mount fuji in], [1600 pennsylvania ave washington dc].</p>
+<div class="trap"><b>Bẫy:</b> Hầu hết query <b>không thể</b> có FullyM. Hãy bảo thủ: phân vân → chọn thấp hơn (HM/HM+). Không FullyM cho: query rộng [knitting], tên nổi tiếng [barack obama], query mơ hồ [ada], tên người thường [tran nguyen], query có cả website + visit-in-person intent ([target], [dmv]).</div>
+
+<h2>HM → MM → SM → FailsM</h2>
+<div class="grid">
+<div class="card" style="border-top:6px solid var(--l3)"><h4>Highly Meets (13.3)</h4><p>Rất hữu ích, “vừa khít”. Thường: giải trí tốt; phản ánh ý kiến người thật; dễ hiểu hoặc sâu sắc; <b>mới</b> khi query cần tin mới. <b>Bắt buộc chính xác</b>; YMYL y khoa phải theo đồng thuận khoa học. Không giới hạn độ dài. Với đa số query, HM là mức cao nhất. Một query có thể có nhiều HM.</p></div>
+<div class="card" style="border-top:6px solid var(--l2)"><h4>Moderately Meets (13.4)</h4><p>Hữu ích nhưng ít giá trị hơn HM: hơi khó hiểu hơn, hơi cũ hơn, ít ý kiến người thật hơn. <b>Không sai, không lỗi thời</b> — trung bình đến tốt. Dùng khi có mặt HM mặt SM.</p></div>
+<div class="card" style="border-top:6px solid var(--l1)"><h4>Slightly Meets (13.5)</h4><p>Kém hữu ích cho intent hợp lý, <b>hoặc</b> hữu ích cho intent unlikely minor. Có liên quan, có chút giá trị; có thể lỗi thời. <b>Tiêu đề rất sai lệch/phóng đại → SM hoặc thấp hơn.</b></p></div>
+<div class="card" style="border-top:6px solid var(--l0)"><h4>Fails to Meet (13.6)</h4><p>Không giúp hầu hết user: lạc đề, cho nghĩa no chance, bỏ qua yếu tố quan trọng (location), thông tin <b>sai hoặc rất cũ</b>.</p></div>
+</div>
+<div class="trap"><b>SM hay FailsM?</b> Nếu user tìm <b>một thông tin cụ thể</b> mà kết quả không cung cấp, hoặc bỏ sót khía cạnh chính của query → <b>FailsM</b>, không phải SM. Ví dụ [can penguins climb] → trang về khối đá “The Penguins” = FailsM.</div>
+<div class="key"><b>Luôn FailsM nếu user rõ ràng không tìm:</b> Harmful (4.2, 4.3), Harmfully Misleading (4.4), Untrustworthy (4.5), Spammy (4.6), Porn.</div>
+
+<h2>Quan hệ PQ và NM (14.0)</h2>
+<div class="grid">
+<div class="card"><h4>NM phụ thuộc query</h4><p>Dựa trên <b>cả</b> query và result.</p></div>
+<div class="card"><h4>PQ không phụ thuộc query</h4><p>Chấm LP <b>không nghĩ</b> đến query. Không có slider PQ → không cần chấm.</p></div>
+<div class="card"><h4>“Useless is useless”</h4><p>Kết quả vô dụng → <b>FailsM</b>, kể cả LP có PQ cao (ví dụ: block nói số quãng tám của đàn piano cho query về guitar).</p></div>
+<div class="card"><h4>HM cần đáng tin</h4><p>Trang untrustworthy, lỗi thời, sai → không được HM. Trang cực tệ (scam, vô nghĩa) → FailsM. <b>Ngoại lệ:</b> query website rõ ràng → target vẫn <b>FullyM</b>.</p></div>
+</div>
+
+<h2>Flags (15.0) — gắn theo kết quả, không theo query</h2>
+<div class="scroll"><table class="stack"><thead><tr><th>Flag</th><th>Khi nào gắn</th><th>NM thường là</th><th>Không gắn khi</th></tr></thead><tbody>
+<tr><td><b>Porn</b></td><td>Block hoặc LP có nội dung khiêu dâm (ảnh, link, popup, ads nổi bật) — <b>bất kể</b> query.</td><td>Query không porn [toys] → FailsM. Query có thể porn [breasts] → chấm như nghĩa không porn là dominant. Query porn rõ ràng → chấm theo mức hữu ích, không mặc định MM/HM.</td><td>—</td></tr>
+<tr><td><b>Foreign Language</b></td><td>LP bằng ngôn ngữ mà đa số user locale không hiểu — kể cả khi <b>bạn</b> hiểu.</td><td>Thường FailsM. Nhưng [baidu.com] tại English (US) → <b>FullyM + flag</b>. Video bài hát/phim nước ngoài thường hữu ích.</td><td>Ngôn ngữ của task, ngôn ngữ phổ biến ở vùng đó, <b>tiếng Anh</b>. Phân vân → không gắn.</td></tr>
+<tr><td><b>Did Not Load</b></td><td>Trang trắng, hoặc chỉ có thông báo lỗi server, không MC/SC/Ads/link. Xét theo <b>LP</b>.</td><td>Thật sự không tải → FailsM. Tải một phần / trang lỗi tuỳ chỉnh → chấm theo mức hữu ích.</td><td>Cảnh báo malware (→ FailsM + PQ Lowest), nội dung hết hạn/bị gỡ, cần subscription.</td></tr>
+<tr><td><b>Upsetting‑Offensive</b> / <b>Not‑for‑Everyone</b></td><td>Chỉ trong một số task. Gây khó chịu/xúc phạm với user điển hình; không phù hợp nơi công cộng, công sở, trường học.</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<div class="key"><b>15.3 Ảnh bất hợp pháp:</b> mọi locale phải tuân luật liên bang Mỹ — báo cáo <b>URL</b> theo hướng dẫn của công ty tuyển dụng.</div>
+</div></section>
+
+<!-- ============ CÒN LẠI ============ -->
+<section class="view" id="v-con-lai"><div class="band">
+<h1>Phần còn lại: 16 tình huống đặc biệt</h1>
+<p class="mute">Mỗi thẻ là một quy tắc hay ra đề. Đọc dòng đậm trước.</p>
+<div class="grid" id="rest"></div>
+<h2>Appendix: Evaluation Platform (25–31)</h2>
+<div class="flow">
+<div class="step" style="background:#5b6370"><b>1. Đọc</b>Hướng dẫn riêng của project — luôn ưu tiên</div><div class="arrow">→</div>
+<div class="step" style="background:#3d6db5"><b>2. Điền</b>Rating, comment, câu hỏi</div><div class="arrow">→</div>
+<div class="step" style="background:var(--acc)"><b>3. Kiểm tra</b>Rating đúng ý, đủ câu bắt buộc</div><div class="arrow">→</div>
+<div class="step" style="background:var(--l4)"><b>4. Submit</b>Hoặc “Submit and Stop Rating”</div>
+</div>
+<div class="grid">
+<div class="card"><h4>Lưu ý khi làm task</h4><ul><li>Đợi mọi block tải xong; tải lại vài lần vẫn trống → release.</li><li>Một bên “did not generate any results” → <b>không</b> release.</li><li><b>Không refresh</b> sau khi đã chấm — sẽ mất rating.</li></ul></div>
+<div class="card"><h4>Release task (28.0)</h4><p>Nút “Report a Problem / Release this Task”. Lý do: <b>lack expertise</b> (query khoa học, game, kỹ thuật) hoặc <b>technical problem</b> (block có dấu ? thay chữ). Nên ghi comment.</p></div>
+<div class="card"><h4>Bản đồ user location (29.0)</h4><p>Chấm xanh = chính xác; vòng tròn/hình chữ nhật xanh = gần đúng; không có = không rõ. Pin = vị trí của block visit-in-person.</p></div>
+<div class="card"><h4>Duplicates (30.0)</h4><p>Dupe khi LP <b>gần như giống hệt</b> và bạn <b>không muốn</b> search engine trả cả hai. Phụ thuộc query: query <b>cụ thể</b> (lời bài hát) → nhiều nguồn để đối chiếu, <b>không</b> dupe; query <b>rộng</b> → khác nhau nhỏ (ads) vẫn dupe. Kiểm tra cả cùng bên và khác bên. Block rất khác nhau dù cùng URL → không dupe.</p></div>
+<div class="card"><h4>Simplified NM (31.0)</h4><p>Block xám “No Rating Required” là <b>contextual results</b> — chỉ để bạn hiểu query.</p></div>
+</div>
+</div></section>
+
+<!-- ============ THẺ NHỚ ============ -->
+<section class="view" id="v-the-nho"><div class="band">
+<h1>Thẻ nhớ</h1>
+<p class="mute">Bấm vào thẻ để lật. Dùng phím ← → để chuyển, Space để lật.</p>
+<div class="row"><select class="btn" id="fcF" aria-label="Lọc chủ đề"><option value="">Tất cả chủ đề</option><option>Part 1</option><option>Part 2</option><option>Part 3</option><option>Khác</option></select><button class="btn" id="fcSh">Trộn thẻ</button></div>
+<div class="fc" id="fc"><div class="inner"><div class="face front"><span class="mute" id="fcT"></span><b id="fcQ"></b></div><div class="face back"><b id="fcA" style="font-size:18px;font-weight:600"></b></div></div></div>
+<div class="row"><button class="btn" id="fcP">← Trước</button><span id="fcN" style="align-self:center"></span><button class="btn pri" id="fcX">Tiếp →</button></div>
+</div></section>
+
+<!-- ============ QUIZ ============ -->
+<section class="view" id="v-quiz"><div class="band">
+<h1>Quiz tình huống</h1>
+<p class="mute">Câu hỏi dựa trên ví dụ và quy tắc trong guideline. Mỗi câu có giải thích.</p>
+<div class="q" id="quizBox"></div>
+</div></section>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const C=['var(--l0)','var(--l1)','var(--l2)','var(--l3)','var(--l4)'];
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+const PQ=[
+['Lowest','Có hại / lừa dối / spam','Mục đích gây hại hoặc lừa dối; Harmful, Untrustworthy hoặc Spammy; MC gần như không effort, originality, added value; reputation cực xấu. <b>Một</b> tiêu chí là đủ.'],
+['Low','Thiếu một khía cạnh quan trọng','Mục đích có ích nhưng: MC thiếu effort/skill, tiêu đề hơi phóng đại, Ads/SC xao nhãng, thông tin site không đủ, reputation hơi xấu, E‑E‑A‑T không đủ. <b>Một</b> dấu hiệu là đủ.'],
+['Medium','Đạt mục đích','“Nothing wrong, but nothing special” hoặc “Mixed”: có điểm High nhưng kèm dấu hiệu Low nhẹ. Rất phổ biến.'],
+['High','Đạt mục đích tốt','Ít nhất một: MC công phu cao; reputation tích cực về chủ đề; E‑E‑A‑T cao. Không có thông tin reputation vẫn có thể High.'],
+['Highest','Đạt mục đích rất tốt','Ít nhất một: MC thuộc loại xuất sắc nhất trên mạng; reputation rất tích cực; E‑E‑A‑T rất cao (nguồn go-to duy nhất).']];
+const NM=[
+['FailsM','Fails to Meet','Không đáp ứng tất cả hoặc gần như tất cả user: lạc đề, nghĩa no chance, sai hoặc rất cũ, có hại/spam/porn mà user không tìm.'],
+['SM','Slightly Meets','Kém hữu ích cho nghĩa hợp lý, <b>hoặc</b> hữu ích cho nghĩa unlikely minor. Tiêu đề rất sai lệch → SM trở xuống.'],
+['MM','Moderately Meets','Hữu ích cho bất kỳ nghĩa hợp lý nào (kể cả reasonable minor) nhưng ít giá trị hơn HM. Không sai, không lỗi thời.'],
+['HM','Highly Meets','Rất hữu ích cho nghĩa dominant, common hoặc reasonable minor. Mức cao nhất với <b>đa số</b> query. Phải chính xác.'],
+['FullyM','Fully Meets','Đặc biệt: chỉ cho query có intent rõ, tìm <b>một</b> kết quả cụ thể, và kết quả đó làm hầu hết user hoàn toàn thỏa mãn.']];
+
+function slider(el,out,data,def){
+  const s=$(el),o=$(out);
+  s.innerHTML=data.map((d,i)=>`<button type="button" style="background:${C[i]}" data-i="${i}" aria-pressed="false">${d[0]}<small>${d[1]}</small></button>`).join('');
+  const pick=i=>{s.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-pressed',j==i));o.innerHTML=`<h4 style="margin:0 0 6px"><span class="pill" style="background:${C[i]}">${data[i][0]}</span> ${data[i][1]}</h4><p style="margin:0">${data[i][2]}</p>`};
+  s.addEventListener('click',e=>{const b=e.target.closest('button');if(b)pick(+b.dataset.i)});pick(def);
+}
+slider('#pqS','#pqO',PQ,2);slider('#nmS','#nmO',NM,3);slider('#nmS2','#nmO2',NM,4);
+
+/* plan */
+const plan=['Ngày 1 · Đọc tab Tổng quan + Part 1 đến hết E‑E‑A‑T','Ngày 2 · Part 1: bảng 5 mức PQ, Lowest (Harmful/Untrustworthy/Spammy), Low','Ngày 3 · Part 1: Medium/High/Highest, trang đặc biệt; làm thẻ nhớ Part 1','Ngày 4 · Part 2: interpretation, 4 loại intent, locale/location','Ngày 5 · Part 3: thang NM, FullyM, SM vs FailsM, PQ vs NM, flags','Ngày 6 · Phần còn lại + Appendix; làm thẻ nhớ toàn bộ','Ngày 7 · Làm Quiz 2 lần, ôn lại các ô “Bẫy” màu đỏ'];
+const done=store.get('rg-plan',[]);
+$('#plan').innerHTML=plan.map((p,i)=>`<label class="check"><input type="checkbox" data-i="${i}" ${done.includes(i)?'checked':''}><span>${p}</span></label>`).join('');
+$('#plan').addEventListener('change',e=>{const i=+e.target.dataset.i,a=store.get('rg-plan',[]).filter(x=>x!==i);if(e.target.checked)a.push(i);store.set('rg-plan',a)});
+
+/* rest */
+const rest=[
+['16.0','Nhiều kiểu kết quả hữu ích','Cho HM cho mọi kết quả rất hữu ích ở mọi nghĩa hợp lý: nhiều định dạng (text, video, ảnh), góc nhìn (blog, MXH), độ sâu, loại site. Nhất là query ý kiến, chủ quan, khám phá, không có đáp án duy nhất.'],
+['16.1','Website + Visit-in-person','[target], [dmv], [citibank]: block chỉ thỏa một intent <b>không được FullyM</b> (thường HM).'],
+['17.0','Độ cụ thể','Query rộng [hotels], [credit cards]: ví dụ phổ biến, nổi bật (Marriott, Visa) vẫn có thể rất hữu ích. LP quá cụ thể (một khách sạn Courtyard, một mẫu quần ở Target) → kém hữu ích / unlikely.'],
+['18.0','Freshness','Tin nóng [tornado], sự kiện định kỳ [olympics], thông tin hiện tại [population of paris], sản phẩm [iphone] → chỉ trang mới được NM cao; trang cũ là “stale”, có thể FailsM. Traffic LA hôm qua = vô dụng. Freshness <b>ít quan trọng</b> với PQ (trang lưu trữ vẫn PQ cao được).'],
+['19.1','Chính tả sai','Sai <b>rõ ràng</b> [federal expres] → chấm theo intent thật. Không rõ ràng → <b>tôn trọng query như được viết</b>.'],
+['19.2','Query tên người','[john stuart] không phải Jon Stewart. [micheal jordan] → người tên Micheal Jordan; Michael Jordan cầu thủ là unlikely minor. Người nổi bật hơn được rating cao hơn.'],
+['20.0','URL query không chỉ có FullyM/FailsM','Review, coupon, bài bách khoa về website cũng hữu ích ([potterybarn.com], [ratemyprofessors.com]). Trang <b>thống kê traffic</b> thường không hữu ích.'],
+['21.0','Query sản phẩm','Đa số không rõ Know/Do/Website. Cho NM cao trang giúp <b>nghiên cứu, duyệt, so sánh</b>. PQ của trang sản phẩm cần đặc biệt cẩn thận.'],
+['22.0','Visit-in-person: “gần” là bao xa?','Có user location, query không ghi địa điểm → kết quả gần là tốt nhất. Cây xăng, cà phê, siêu thị: rất gần. Bác sĩ, thư viện, hồ bơi, đường mòn: chấp nhận xa hơn. Phòng khám chuyên khoa: xa hơn nữa.'],
+['23.0','Kết quả tiếng Anh ở locale không phải tiếng Anh','Query bằng ngôn ngữ locale → user muốn kết quả ngôn ngữ đó. Kết quả tiếng Anh chỉ cao nếu user locale mong muốn; nếu đa số không đọc được → vô dụng (FailsM). Phân vân → ưu tiên ngôn ngữ của task. <b>(Quan trọng nếu bạn chấm locale Vietnamese.)</b>'],
+['24.0','Từ điển & bách khoa','Chỉ cao khi intent là “là gì / nghĩa gì”: [obsequious] → hữu ích. Từ phổ thông [rainbow] → có thể chỉ SM. [cafeteria] → user muốn chỗ ăn. [atm near me] + bài bách khoa → FailsM.'],
+['15.4','Foreign Language nhắc lại','Gắn theo LP, không theo block. Gắn cho mọi trang ngoại ngữ kể cả khi user muốn. Không chấm được PQ → để N/A.']];
+$('#rest').innerHTML=rest.map(r=>`<div class="card"><span class="pill" style="background:var(--acc)">${r[0]}</span><h4 style="margin-top:8px">${r[1]}</h4><p>${r[2]}</p></div>`).join('');
+
+/* flashcards */
+const FC=[
+['Part 1','3 bước của PQ rating?','1) Đánh giá mục đích thật (hại/lừa dối → Lowest). 2) Đánh giá khả năng gây hại (harmful, untrustworthy, spammy → Lowest). 3) Còn lại: chấm theo mức đạt mục đích.'],
+['Part 1','MC, SC, Ads khác nhau thế nào?','MC trực tiếp giúp trang đạt mục đích (kể cả tiêu đề). SC hỗ trợ trải nghiệm (điều hướng). Ads là nội dung/link để kiếm tiền, kể cả affiliate.'],
+['Part 1','Có quảng cáo có làm giảm PQ không?','Không. Có hay không có Ads tự nó không phải lý do cho High hay Low. Chỉ khi Ads xao nhãng (Low) hoặc cố tình che MC (Lowest).'],
+['Part 1','4 loại YMYL?','Health or Safety; Financial Security; Government, Civics & Society; Other.'],
+['Part 1','Thành viên quan trọng nhất của E‑E‑A‑T?','Trust. Trang không đáng tin có E‑E‑A‑T thấp bất kể Experience, Expertise, Authoritativeness.'],
+['Part 1','Không tìm thấy thông tin danh tiếng thì sao?','Với site nhỏ/người thường: không tích cực, không tiêu cực. Chú ý hơn tới các yếu tố khác, nhất là YMYL.'],
+['Part 1','Site nói về mình khác với nguồn độc lập?','Tin nguồn độc lập uy tín.'],
+['Part 1','4 thước đo chất lượng MC?','Effort, Originality, Talent or Skill, Accuracy (YMYL: khớp đồng thuận chuyên gia).'],
+['Part 1','Lowest vs Low với nội dung copy?','Lowest: tất cả/gần hết MC copy, little to no effort/originality/value. Low: phần lớn copy nhưng có chút effort (biên tập, tuyển chọn, thêm nội dung gốc).'],
+['Part 1','Expired domain abuse là gì?','Mua domain cũ uy tín (trường học, từ thiện, chính phủ) rồi đăng nội dung ít giá trị, kiếm tiền (casino, payday loans). Kiểm tra bằng Internet Archive.'],
+['Part 1','Site reputation abuse là gì?','Nội dung bên thứ 3 đăng trên site host chủ yếu để tận dụng tín hiệu xếp hạng của host (site y tế đăng “best casinos”).'],
+['Part 1','Specified Group dựa trên những gì?','Tuổi, đẳng cấp, khuyết tật, dân tộc, bản dạng giới, tình trạng nhập cư, quốc tịch, chủng tộc, tôn giáo, giới tính, xu hướng tính dục, cựu chiến binh, nạn nhân sự kiện bạo lực lớn, các nhóm bị phân biệt có hệ thống khác.'],
+['Part 1','2 kiểu trang Medium?','“Nothing wrong, but nothing special” và “Mixed, but with some redeeming qualities”.'],
+['Part 1','Trang 404 hỏng tạm thời vs hệ thống?','Tạm thời (trang lẻ) → Low. Hệ thống (nhiều trang giống vậy) → Lowest. Custom 404 tốt → thường Medium.'],
+['Part 1','Thread forum mới chỉ có câu hỏi?','Thường Medium (cần thời gian), trừ khi có dấu hiệu Low khác.'],
+['Part 2','5 mức interpretation?','Dominant, Common, Reasonable minor, Unlikely minor, No chance.'],
+['Part 2','Know Simple là gì?','Query cần một đáp án cụ thể, đúng và đầy đủ, vừa 1–2 câu hoặc danh sách ngắn, đa số đồng ý. Ví dụ [barack obama height], [weather].'],
+['Part 2','4 loại user intent?','Know (Know Simple), Do, Website, Visit-in-person.'],
+['Part 2','Explicit location là gì?','Địa điểm ghi trong query, ví dụ [New York hotels]. Luôn chú ý, dù khác user location.'],
+['Part 2','Thông tin trong SCRB bị cũ do độ trễ?','Không phạt. Giả định block hiển thị thông tin hiện tại và tính năng tương tác hoạt động.'],
+['Part 3','3 điều kiện Fully Meets?','Intent cụ thể, rõ, không mơ hồ; có một kết quả cụ thể hầu hết user tìm; hầu hết user hoàn toàn thỏa mãn.'],
+['Part 3','SM hay FailsM khi kết quả thiếu thông tin cụ thể user cần?','FailsM. SM chỉ khi liên quan và có chút giá trị.'],
+['Part 3','Kết quả vô dụng nhưng LP có PQ cao?','FailsM — “useless is useless”.'],
+['Part 3','Query website rõ ràng mà target là trang PQ thấp?','Vẫn FullyM — người dùng được quyền tìm bất kỳ website nào.'],
+['Part 3','Khi nào KHÔNG gắn Foreign Language?','Khi LP bằng ngôn ngữ của task, ngôn ngữ phổ biến ở vùng đó, hoặc tiếng Anh. Phân vân → không gắn.'],
+['Part 3','Did Not Load không dùng cho?','Cảnh báo malware, nội dung hết hạn/bị gỡ, trang cần subscription.'],
+['Part 3','Query “possible porn intent” như [breasts]?','Chấm như thể nghĩa không porn (sức khoẻ/giải phẫu) là dominant.'],
+['Part 3','Tiêu đề kết quả rất sai lệch/phóng đại?','Slightly Meets hoặc thấp hơn.'],
+['Khác','Query vừa website vừa visit-in-person ([dmv])?','Block chỉ thỏa một intent không được FullyM.'],
+['Khác','Query chính tả sai không rõ ràng?','Tôn trọng query như được viết.'],
+['Khác','Khi nào 2 kết quả là dupe?','LP gần như giống hệt và bạn không muốn search engine trả cả hai. Query cụ thể (lời bài hát) thường không dupe vì user muốn đối chiếu.'],
+['Khác','Refresh trang task sau khi chấm?','Không! Sẽ mất rating đã nhập.']];
+let deck=FC.map((_,i)=>i),pos=0;const fc=$('#fc');
+function showFC(){const list=deck.filter(i=>!$('#fcF').value||FC[i][0]==$('#fcF').value);if(!list.length)return;pos=(pos+list.length)%list.length;const c=FC[list[pos]];fc.classList.remove('flip');$('#fcT').textContent=c[0];$('#fcQ').textContent=c[1];$('#fcA').textContent=c[2];$('#fcN').textContent=(pos+1)+' / '+list.length}
+fc.addEventListener('click',()=>fc.classList.toggle('flip'));
+$('#fcX').onclick=()=>{pos++;showFC()};$('#fcP').onclick=()=>{pos--;showFC()};
+$('#fcF').onchange=()=>{pos=0;showFC()};
+$('#fcSh').onclick=()=>{deck.sort(()=>Math.random()-.5);pos=0;showFC()};
+document.addEventListener('keydown',e=>{if(location.hash!='#the-nho')return;if(e.key=='ArrowRight'){pos++;showFC()}if(e.key=='ArrowLeft'){pos--;showFC()}if(e.key==' '){e.preventDefault();fc.classList.toggle('flip')}});
+showFC();
+
+/* quiz */
+const Q=[
+['Một trang có nhiều quảng cáo nhưng MC hữu ích, quảng cáo không che nội dung. Điều này ảnh hưởng PQ thế nào?',['Tự động Low','Tự động Lowest','Bản thân việc có Ads không phải lý do hạ điểm','Chỉ được tối đa Medium'],2,'Guideline nhấn mạnh: có hay không có Ads tự nó không phải lý do cho High hay Low. Nhiều site cần monetization để tồn tại.'],
+['Trang về “khi nào nên đến phòng cấp cứu” thuộc mức YMYL nào?',['Clear YMYL','May be YMYL','Not YMYL','Không phải chủ đề'],0,'Lời khuyên sai về việc đi cấp cứu có thể gây hại nghiêm trọng → Clear YMYL (Health or Safety).'],
+['Bạn tìm thấy thông tin site tự nói về mình trái ngược hoàn toàn với các bài báo độc lập uy tín. Bạn tin bên nào?',['Site, vì họ hiểu mình nhất','Nguồn độc lập uy tín','Bên nào có nhiều thông tin hơn','Bỏ qua cả hai'],1,'Mục 2.5: khi có mâu thuẫn, hãy tin nguồn độc lập uy tín.'],
+['Một site bán hàng đẹp mắt, nhưng có nhiều review mô tả gửi tiền mà không nhận được hàng, và một bài báo về lừa đảo tài chính. PQ?',['Medium','Low','Lowest','High vì thiết kế tốt'],2,'Bằng chứng lừa đảo tài chính = danh tiếng cực kỳ tiêu cực → Untrustworthy → Lowest (ví dụ site bán xích đu trẻ em).'],
+['Trang có toàn bộ nội dung là bài báo AP được cấp phép (syndicated). Có bị coi là “copied” không?',['Có, luôn Lowest','Không, nội dung licensed/syndicated không bị coi là copied','Có, nhưng chỉ Low','Chỉ khi không ghi nguồn'],1,'Mục 4.6.6: licensed hoặc syndicated content không bị coi là copied.'],
+['Một bài nấu ăn có 2.000 chữ “filler” về lịch sử món ăn đặt trước công thức, khiến khó tìm công thức. PQ?',['Highest vì dài','Low','Lowest','Không ảnh hưởng'],1,'Mục 5.2.2: filler nổi bật, ít giá trị làm khó tìm MC hữu ích → Low.'],
+['Bài review nhà hàng của người chưa từng ăn ở đó, trên một site có danh tiếng tốt. PQ?',['High nhờ danh tiếng site','Medium','Low vì thiếu Experience','Lowest'],2,'Mục 5.1: Low khi thiếu E‑E‑A‑T cho mục đích; không gì (kể cả danh tiếng tốt) bù được.'],
+['Bài đăng cảm động về lần đầu đi bầu cử sau khi nhập quốc tịch nhưng ghi SAI ngày bầu cử. PQ?',['Highest vì trải nghiệm chân thật','High','Medium','Lowest'],3,'FAQ 11.0: trải nghiệm trên chủ đề YMYL có thể Highest, nhưng thông tin sai về khi nào/ở đâu bầu → Lowest vì có thể khiến người khác lỡ quyền bầu cử.'],
+['Trang hướng dẫn bị lỗi không hiển thị MC, nhưng các trang khác của site (báo địa phương uy tín) đều bình thường. PQ?',['Lowest','Low','Did Not Load, không chấm','High'],1,'Mục 9.2: hỏng tạm thời, cô lập → Low. Nếu nhiều trang cùng lỗi (hệ thống) → Lowest.'],
+['Thread forum mới đăng 1 giờ trước, chỉ có câu hỏi, chưa ai trả lời. PQ?',['Lowest','Low','Thường Medium','High'],2,'Mục 9.3: trang mới chỉ có câu hỏi thường Medium vì cần thời gian, trừ khi có dấu hiệu Low khác.'],
+['Query [apple] tại English (US): “thành phố Apple” thuộc loại interpretation nào?',['Dominant','Common','Unlikely minor','No chance'],2,'Ví dụ trong mục 12.5: máy tính = dominant, trái cây = common, tên người/thành phố = unlikely minor.'],
+['Query [weather] thuộc loại intent nào?',['Know (rộng)','Know Simple','Do','Website'],1,'Mục 12.7.1: [weather], [weather today]… được coi là Know Simple.'],
+['User ở Dallas tìm [New York hotels]. Kết quả tốt nhất là?',['Khách sạn gần Dallas','Khách sạn ở New York','Trang về thành phố New York','Không thể biết'],1,'Explicit location trong query cho biết chính xác user muốn gì, bất kể user location.'],
+['Query [knitting] có thể có kết quả Fully Meets không?',['Có, trang knitting phổ biến nhất','Có, nếu là video','Không, đây là query rộng','Chỉ khi có user location'],2,'Mục 13.2.2: query rộng, nhiều nhu cầu khác nhau, không có nguồn chính thức → không thể FullyM.'],
+['Query [can penguins climb]; kết quả là trang về khối đá tên “The Penguins”. NM?',['SM','MM','FailsM','HM'],2,'Mục 13.6.1: lạc đề, không trả lời intent → FailsM.'],
+['Query [how many octaves on a guitar]; block hiển thị số quãng tám của piano, link tới trang piano chất lượng cao. NM?',['HM vì LP PQ cao','MM','SM','FailsM'],3,'Mục 14.0: thông tin sai so với query; “useless is useless” → FailsM dù PQ của LP cao.'],
+['Query [baidu.com], locale English (US). LP là trang chủ Baidu bằng tiếng Trung. Đáp án?',['FailsM + Foreign Language','FullyM + Foreign Language','FullyM, không gắn flag','SM + Foreign Language'],1,'Mục 15.4: vẫn gắn flag cho mọi trang ngoại ngữ, nhưng user muốn chính trang này → FullyM.'],
+['Bấm vào kết quả thì thấy cảnh báo malware. Bạn làm gì?',['Gắn Did Not Load','FailsM + PQ Lowest, không gắn Did Not Load','Vào trang để kiểm tra','Release task'],1,'Mục 15.5: không dùng Did Not Load cho cảnh báo malware; giả định trang độc hại → FailsM và Lowest.'],
+['Query [target], user ở Jacksonville. Block hiển thị 3 cửa hàng Target gần đó. NM?',['FullyM','HM','SM','FailsM'],1,'Mục 16.1: query có cả website và visit-in-person intent; block chỉ thỏa một intent → không FullyM, ở đây là HM.'],
+['Query [los angeles traffic]; LP hiển thị giao thông của ngày hôm qua. NM?',['HM','MM','SM','FailsM'],3,'Mục 18.0: thông tin giao thông dù chỉ 1 ngày tuổi cũng stale và vô dụng.'],
+['Query [john stuart]. Bạn nên hiểu là?',['Danh hài Jon Stewart (sai chính tả)','Người tên John Stuart','Không rõ, release','Bất kỳ ai tên John'],1,'Mục 19.2: không phải lỗi chính tả rõ ràng → tôn trọng query như được viết.'],
+['Query [rainbow]; kết quả là định nghĩa trong từ điển. NM hợp lý nhất?',['FullyM','HM','Có thể SM','Luôn FailsM'],2,'Mục 24.0: đa số đã biết cầu vồng là gì; định nghĩa từ điển ít hữu ích → SM có thể phù hợp.'],
+['Query [material girl lyrics]: hai trang lời bài hát từ hai site khác nhau. Có phải dupe không?',['Có, cùng nội dung','Không, user muốn đối chiếu từ nhiều nguồn','Có, nếu cùng quảng cáo','Chỉ khi cùng URL'],1,'Mục 30.2: query cụ thể → nhiều nguồn giúp kiểm chứng, không đánh dấu dupe.'],
+['Task locale Vietnamese (VN), query bằng tiếng Việt. LP bằng tiếng Anh, đa số user không đọc được. NM?',['HM nếu nội dung tốt','Thường FailsM','Luôn MM','Gắn Foreign Language và HM'],1,'Mục 23.0: trừ khi query yêu cầu, kết quả tiếng Anh vô dụng nếu đa số user locale không đọc được. (Lưu ý: tiếng Anh không gắn Foreign Language flag.)']];
+let qi=0,score=0,ans=false;
+function drawQ(){const b=$('#quizBox');
+  if(qi>=Q.length){const pct=Math.round(score/Q.length*100);b.innerHTML=`<div class="card" style="text-align:center"><h2 style="margin-top:0">${score} / ${Q.length} câu đúng</h2><div class="bar"><i style="width:${pct}%"></i></div><p>${pct>=80?'Rất tốt! Ôn lại các câu sai rồi chuyển sang thẻ nhớ.':'Hãy đọc lại các ô “Bẫy” màu đỏ ở Part 1 và Part 3, rồi làm lại.'}</p><button class="btn pri" id="qr">Làm lại</button></div>`;$('#qr').onclick=()=>{qi=0;score=0;drawQ()};const best=store.get('rg-best',0);if(score>best)store.set('rg-best',score);return}
+  const q=Q[qi];ans=false;
+  b.innerHTML=`<div class="mute">Câu ${qi+1} / ${Q.length} · Đúng: ${score} · Kỷ lục: ${store.get('rg-best',0)}</div><div class="bar"><i style="width:${qi/Q.length*100}%"></i></div><h3 style="font-size:20px">${q[0]}</h3>${q[1].map((o,i)=>`<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}<div id="qe"></div>`;
+  b.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{if(ans)return;ans=true;const i=+o.dataset.i;if(i==q[2])score++;else o.classList.add('no');b.querySelectorAll('.opt')[q[2]].classList.add('ok');
+    $('#qe').innerHTML=`<div class="${i==q[2]?'key':'trap'}"><b>${i==q[2]?'Chính xác.':'Chưa đúng.'}</b> ${q[3]}</div><div class="row"><button class="btn pri" id="qn">Câu tiếp →</button></div>`;$('#qn').onclick=()=>{qi++;drawQ()};$('#qn').focus()});
+}
+drawQ();
+
+/* routing */
+const views=['tong-quan','part1','part2','part3','con-lai','the-nho','quiz'];
+function route(){const h=location.hash.slice(1),v=views.includes(h)?h:'tong-quan';views.forEach(x=>$('#v-'+x).classList.toggle('on',x==v));document.querySelectorAll('#nav a').forEach(a=>{if(a.getAttribute('href')=='#'+v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});window.scrollTo(0,0)}
+window.addEventListener('hashchange',route);route();
+}
+</script>
+</body>
+</html>
